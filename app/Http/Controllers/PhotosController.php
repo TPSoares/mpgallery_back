@@ -31,7 +31,7 @@ class PhotosController extends BaseController
         if(env('APP_ENV') == 'local') {
             $path = public_path('images');
         } else {
-            $path = app('APP_URL') . '/images';
+            $path = env('APP_URL') . '/images';
         }
         $img = Image::make($image);
         //treats the image and save it on the right path
