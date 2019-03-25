@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 class UserController extends BaseController
 {
     
-
     public function getUserPhotos() {
-        $photos = Photos::where('user_id', '=', Auth::id())->get();
+        $photos = Photos::where('user_id', Auth::id())->get();
 
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);

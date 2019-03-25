@@ -8,7 +8,6 @@ use Image;
 use Exception;
 use App\Photos;
 use Illuminate\Support\Facades\Auth;
-use function GuzzleHttp\Promise\all;
 
 class PhotosController extends BaseController
 {
@@ -24,12 +23,16 @@ class PhotosController extends BaseController
             return $this->sendError($validate->errors());
         }
 
-        //gets the file
+        //gets the file 
         $image = $request->file('image');
         //gives a random name to it
         $imgName = time() . '.' . $image->getClientOriginalExtension();
         //gets the path to save it
-        $path = public_path('images');
+        if(env('APP_ENV') == 'local') {
+            $path = public_path('images');
+        } else {
+            $path = app('APP_URL') . '/images';
+        }
         $img = Image::make($image);
         //treats the image and save it on the right path
         $img->encode('jpg', 75)->resize(500, 500)->save($path . '/' . $imgName);
