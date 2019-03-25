@@ -8,6 +8,7 @@ use Image;
 use Exception;
 use App\Photos;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends BaseController
 {
@@ -23,26 +24,7 @@ class PhotosController extends BaseController
             return $this->sendError($validate->errors());
         }
 
-        //gets the file 
-        $image = $request->file('image');
-        //gives a random name to it
-        $imgName = time() . '.' . $image->getClientOriginalExtension();
-        //gets the path to save it
-        if(env('APP_ENV') == 'local') {
-            $path = public_path('images');
-        } else {
-            //path to url
-            $path = env('APP_URL') . '/images';
-        }
-
-        $localStoragePath = public_path('images');
-
-        $img = Image::make($image);
-        //treats the image and save it on the right path
-        $img->encode('jpg', 75)->resize(500, 500)->save($localStoragePath . '/' . $imgName);
-
-        $data['path'] = $path . '/' . $imgName;
-       
+        $data['path'] = $this->imageStorage($request->file('image'));
         $data['user_id'] = Auth::id();
         
         try {
@@ -125,5 +107,30 @@ class PhotosController extends BaseController
         } catch (Exception $e) {
             return $this->sendError('Erro ao deletar foto!');
         }
+    }
+
+    private function imageStorage($image) {
+        //gives a random name to it
+        $imgName = time() . '.' . $image->getClientOriginalExtension();
+        $localStoragePath = public_path('images');
+
+        $img = Image::make($image);
+        //treats the image and save it on the right path
+        $img->encode('jpg', 75)->resize(500, 500)->save($localStoragePath . '/' . $imgName);
+
+        //gets the path to save it
+        if(env('APP_ENV') == 'local') {
+            $path = public_path('images');
+        } else {
+            //path to url
+            $path = env('APP_URL') . '/images';
+            //AWS S3 save
+            Storage::disk('s3')->put($imgName, $img);
+
+            return Storage::disk('s3')->exists($img);
+
+        }
+
+        return $path . '/' . $imgName;
     }
 }
