@@ -127,7 +127,7 @@ class PhotosController extends BaseController
             //AWS S3 save
             Storage::disk('s3')->put($imgName, $img);
 
-            return Storage::disk('s3')->exists($img);
+            return Storage::disk('s3')->url($imgName);
 
         }
 

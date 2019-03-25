@@ -26,6 +26,15 @@ Route::prefix('photos')->middleware('auth:api')->group(function() {
     Route::get('/{id}', 'PhotosController@read');
     Route::put('/{id}', 'PhotosController@update');
     Route::delete('/{id}', 'PhotosController@delete');
+    //Likes session
+    Route::post('/{id}/like', 'LikesController@create');
+    Route::get('/{id}/like', 'LikesController@read');
+    Route::delete('/{id}/like', 'LikesController@delete');
+    //Comments session
+    Route::post('/{id}/comment', 'CommentsController@create');
+    Route::get('/{id}/comment', 'CommentsController@read');
+    Route::put('/{id}/comment/{commentId}', 'CommentsController@update');
+    Route::delete('/{id}/comment/{commentId}', 'CommentsController@delete');
 });
 
 Route::prefix('user')->middleware('auth:api')->group(function() {
