@@ -80,7 +80,7 @@ class PhotosController extends BaseController
         }
 
         $photo['title'] = $data['title'];
-        $photo['description'] = $data['description'];
+        $photo['description'] = $data['description'];   
 
         try {   
             $photo->save();
