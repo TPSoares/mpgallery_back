@@ -7,6 +7,7 @@ use Validator;
 use Image;
 use Exception;
 use App\Photos;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,6 +51,12 @@ class PhotosController extends BaseController
 
     public function readAll() {
         $photos = Photos::all();
+
+        //find each user of each photo
+        foreach ($photos as $photo) {
+            $user = User::find($photo['user_id']);
+            $photo['user'] = $user;
+        }
 
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);
