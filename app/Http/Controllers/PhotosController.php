@@ -8,6 +8,8 @@ use Image;
 use Exception;
 use App\Photos;
 use App\User;
+use App\Comments;
+use App\Likes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,7 +57,11 @@ class PhotosController extends BaseController
         //find each user of each photo
         foreach ($photos as $photo) {
             $user = User::find($photo['user_id']);
+            $comments = Comments::find($photo['id']);
+            $likes = Likes::find($photo['id']);
             $photo['user'] = $user;
+            $photo['comments'] = $comments;
+            $photo['likes'] = $likes->count();
         }
 
         if(!$photos) {
