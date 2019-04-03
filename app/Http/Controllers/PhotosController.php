@@ -57,18 +57,18 @@ class PhotosController extends BaseController
         //find each user of each photo
         foreach ($photos as $photo) {
             $user = User::find($photo['user_id']);
-            $comments = Comments::find($photo['id']);
-            $likes = Likes::find($photo['id']);
+            $comments = Comments::where('photo_id', $photo['id'])->get();
+            $likes = Likes::where('photo_id', $photo['id'])->get();
             $photo['user'] = $user;
             $photo['comments'] = $comments;
-            $photo['likes'] = $likes->count();
+            $photo['likes'] = $likes;
         }
 
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);
         }
 
-        return $this->sendResponse($photos['data'], '');
+        return $this->sendResponse($photos, '');
     }
     public function update(Request $request, $id) {
 
