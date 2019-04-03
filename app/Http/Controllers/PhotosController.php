@@ -68,7 +68,7 @@ class PhotosController extends BaseController
             return $this->sendError('Fotos não encontrada!', 404);
         }
 
-        return $this->sendResponse($photos, '');
+        return $this->sendResponse($photos['data'], '');
     }
     public function update(Request $request, $id) {
 
