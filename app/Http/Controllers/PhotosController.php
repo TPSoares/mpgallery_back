@@ -50,7 +50,7 @@ class PhotosController extends BaseController
     }
 
     public function readAll() {
-        $photos = Photos::all();
+        $photos = Photos::paginate(5);
 
         //find each user of each photo
         foreach ($photos as $photo) {
