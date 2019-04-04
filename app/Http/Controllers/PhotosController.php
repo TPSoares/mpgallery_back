@@ -57,7 +57,7 @@ class PhotosController extends BaseController
         //find each user of each photo
         foreach ($photos as $photo) {
             $user = User::find($photo['user_id']);
-            $comments = Comments::where('photo_id', $photo['id'])->paginate(3);
+            $comments = Comments::where('photo_id', $photo['id'])->take(3)->get();
             foreach($comments as $comment) {
                 $comment_user = User::find($comment['user_id']);
                 $comment['user'] = $comment_user;
