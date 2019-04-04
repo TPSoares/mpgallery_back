@@ -50,7 +50,11 @@ class CommentsController extends BaseController
         }
 
         try {
-            $comments = Comments::where('photo_id', $photo['id'])->offset($offset)->limit($limit)->get();
+            $comments = Comments::where('photo_id', $photo['id'])
+            ->offset($offset)
+            ->limit($limit)
+            ->orderBy('created_at', 'desc')
+            ->get();
             // $comments->withPath('commentpage');
             foreach($comments as $comment) {
                 $comment_user = User::find($comment['user_id']);
