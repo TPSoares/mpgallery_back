@@ -57,14 +57,14 @@ class PhotosController extends BaseController
         //find each user of each photo
         foreach ($photos as $photo) {
             $user = User::find($photo['user_id']);
-            $comments = Comments::where('photo_id', $photo['id'])->get();
+            $comments = Comments::where('photo_id', $photo['id'])->paginate(3);
             foreach($comments as $comment) {
                 $comment_user = User::find($comment['user_id']);
                 $comment['user'] = $comment_user;
             }
             $likes = Likes::where('photo_id', $photo['id'])->get();
             $photo['user'] = $user;
-            $photo['comments'] = $comments;
+            // $photo['comments'] = $comments;
             $photo['likes'] = $likes;
         }
 

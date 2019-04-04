@@ -49,7 +49,7 @@ class CommentsController extends BaseController
         }
 
         try {
-            $comments = Comments::where('photo_id', $photo['id'])->get();
+            $comments = Comments::where('photo_id', $photo['id'])->paginate(3);
         } catch (Exception $e) {
             return $this->sendError('Erro ao retornar comentários!');
             // return $e->getMessage();
