@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Photos;
 use App\Comments;
+use App\User;
 use Exception;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +51,10 @@ class CommentsController extends BaseController
 
         try {
             $comments = Comments::where('photo_id', $photo['id'])->paginate(3);
+            foreach($comments as $comment) {
+                $comment_user = User::find($comment['user_id']);
+                $comment['user'] = $comment_user;
+            }
         } catch (Exception $e) {
             return $this->sendError('Erro ao retornar comentários!');
             // return $e->getMessage();
