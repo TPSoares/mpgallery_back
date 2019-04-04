@@ -32,7 +32,7 @@ Route::prefix('photos')->middleware('auth:api')->group(function() {
     Route::delete('/{id}/like', 'LikesController@delete');
     //Comments session
     Route::post('/{id}/comment', 'CommentsController@create');
-    Route::get('/{id}/comment', 'CommentsController@read');
+    Route::get('/{id}/comment/offset/{offset}/limit/{limit}', 'CommentsController@read');
     Route::put('/{id}/comment/{commentId}', 'CommentsController@update');
     Route::delete('/{id}/comment/{commentId}', 'CommentsController@delete');
 });

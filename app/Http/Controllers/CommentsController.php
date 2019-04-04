@@ -42,7 +42,7 @@ class CommentsController extends BaseController
         return $this->sendResponse($createdComment, 'Comentário criado!');
     }
 
-    public function read($id) {
+    public function read($id, $offset, $limit) {
         $photo = Photos::find($id);
 
         if(!$photo) {
@@ -50,7 +50,7 @@ class CommentsController extends BaseController
         }
 
         try {
-            $comments = Comments::where('photo_id', $photo['id'])->paginate(3);
+            $comments = Comments::where('photo_id', $photo['id'])->offset($offset)->limit($limit)->get();
             // $comments->withPath('commentpage');
             foreach($comments as $comment) {
                 $comment_user = User::find($comment['user_id']);
