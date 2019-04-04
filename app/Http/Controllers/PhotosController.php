@@ -64,7 +64,7 @@ class PhotosController extends BaseController
             }
             $likes = Likes::where('photo_id', $photo['id'])->get();
             $photo['user'] = $user;
-            // $photo['comments'] = $comments;
+            $photo['comments'] = $comments;
             $photo['likes'] = $likes;
         }
 
