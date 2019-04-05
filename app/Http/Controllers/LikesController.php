@@ -27,7 +27,8 @@ class LikesController extends BaseController
         ])->get();
 
         if($like->count() > 0) {
-            return;
+            $like->each->delete();
+            return $this->sendResponse($like, 'Like deletado');
         }
 
         try {
