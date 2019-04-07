@@ -52,11 +52,11 @@ class PhotosController extends BaseController
     }
 
     public function readAll() {
-        $photos = Photos::paginate(5);
+        $photos = Photos::paginate(5)->orderBy('created_at', 'desc')->get();
 
         //find each user of each photo
         foreach ($photos as $photo) {
-            $user = User::find($photo['user_id'])->orderBy('created_at', 'desc')->get();
+            $user = User::find($photo['user_id']);
             $comments = Comments::where('photo_id', $photo['id'])->offset(0)->limit(3)->orderBy('created_at', 'desc')->get();
             foreach($comments as $comment) {
                 $comment_user = User::find($comment['user_id']);
