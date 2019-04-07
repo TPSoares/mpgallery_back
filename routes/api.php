@@ -22,7 +22,7 @@ Route::post('/signin', 'AuthController@signin');
 
 Route::prefix('photos')->middleware('auth:api')->group(function() {
     Route::post('/store', 'PhotosController@create');
-    Route::get('/', 'PhotosController@readAll');
+    Route::get('/{offset}', 'PhotosController@readAll');
     Route::get('/{id}', 'PhotosController@read');
     Route::put('/{id}', 'PhotosController@update');
     Route::delete('/{id}', 'PhotosController@delete');

@@ -51,8 +51,8 @@ class PhotosController extends BaseController
         return $this->sendResponse($photo, '');
     }
 
-    public function readAll() {
-        $photos = Photos::paginate(5)->orderBy('created_at', 'desc')->get();
+    public function readAll($offset) {
+        $photos = Photos::offset($offset)->limit(5)->orderBy('created_at', 'desc')->get();
 
         //find each user of each photo
         foreach ($photos as $photo) {
