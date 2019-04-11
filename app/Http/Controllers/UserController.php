@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Photos;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -17,4 +18,16 @@ class UserController extends BaseController
 
         return $this->sendResponse($photos, '');
     }
+
+    public function getUser($user_id) {
+        $user = User::find($user_id);
+
+        if(!$user) {
+            return $this->sendError('Usuário não encontrado!', 404);
+        }
+
+        return $this->sendResponse($user, '');
+
+    }
+
 }

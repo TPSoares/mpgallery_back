@@ -17,21 +17,27 @@ class PhotosController extends BaseController
 {
     public function create(Request $request) {
         $data = $request->all();
-
+        
         $validate = Validator::make($data, [
             'title' => 'required',
-            'image' => 'required|image|'
+            'image.*' => 'required|image|'
         ]);
 
         if($validate->fails()){
             return $this->sendError($validate->errors());
         }
 
-        $data['path'] = $this->imageStorage($request->file('image'));
+        $user = User::find(Auth::id());
+        
+        $data['path'] = $this->imageStorage($request['image']);
         $data['user_id'] = Auth::id();
+        // $data['user'] = $user;
+
+        // return $data;
         
         try {
             $photo = Photos::create($data);
+            $photo['user'] = $user;
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -55,18 +61,18 @@ class PhotosController extends BaseController
         $photos = Photos::offset($offset)->limit(5)->orderBy('created_at', 'desc')->get();
 
         //find each user of each photo
-        foreach ($photos as $photo) {
-            $user = User::find($photo['user_id']);
-            $comments = Comments::where('photo_id', $photo['id'])->offset(0)->limit(3)->orderBy('created_at', 'desc')->get();
-            foreach($comments as $comment) {
-                $comment_user = User::find($comment['user_id']);
-                $comment['user'] = $comment_user;
-            }
-            $likes = Likes::where('photo_id', $photo['id'])->get();
-            $photo['user'] = $user;
-            $photo['comments'] = $comments;
-            $photo['likes'] = $likes;
-        }
+        // foreach ($photos as $photo) {
+        //     $user = User::find($photo['user_id']);
+        //     $comments = Comments::where('photo_id', $photo['id'])->offset(0)->limit(3)->orderBy('created_at', 'desc')->get();
+        //     foreach($comments as $comment) {
+        //         $comment_user = User::find($comment['user_id']);
+        //         $comment['user'] = $comment_user;
+        //     }
+        //     $likes = Likes::where('photo_id', $photo['id'])->get();
+        //     $photo['user'] = $user;
+        //     $photo['comments'] = $comments;
+        //     $photo['likes'] = $likes;
+        // }
 
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);
@@ -127,8 +133,10 @@ class PhotosController extends BaseController
     }
 
     private function imageStorage($image) {
+
         //gives a random name to it
-        $imgName = time() . '.' . $image->getClientOriginalExtension();
+        // $imgName = time() . '.' . $image->getClientOriginalExtension();
+        $imgName = time() . '.' . 'jpg'; //temporary solution
         $localStoragePath = public_path('images');
 
         $img = Image::make($image);

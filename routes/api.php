@@ -22,7 +22,7 @@ Route::post('/signin', 'AuthController@signin');
 
 Route::prefix('photos')->middleware('auth:api')->group(function() {
     Route::post('/store', 'PhotosController@create');
-    Route::get('/{offset}', 'PhotosController@readAll');
+    Route::get('/offset/{offset}', 'PhotosController@readAll');
     Route::get('/{id}', 'PhotosController@read');
     Route::put('/{id}', 'PhotosController@update');
     Route::delete('/{id}', 'PhotosController@delete');
@@ -35,6 +35,8 @@ Route::prefix('photos')->middleware('auth:api')->group(function() {
     Route::get('/{id}/comment/offset/{offset}/limit/{limit}', 'CommentsController@read');
     Route::put('/{id}/comment/{commentId}', 'CommentsController@update');
     Route::delete('/{id}/comment/{commentId}', 'CommentsController@delete');
+    //User
+    Route::get('/user/{user_id}', 'UserController@getUser');
 });
 
 Route::prefix('user')->middleware('auth:api')->group(function() {
