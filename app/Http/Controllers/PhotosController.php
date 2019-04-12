@@ -38,6 +38,8 @@ class PhotosController extends BaseController
         try {
             $photo = Photos::create($data);
             $photo['user'] = $user;
+            $photo['likes'] = [];
+            $photo['comments'] = [];
         } catch (Exception $e) {
             return $e->getMessage();
         }
