@@ -8,12 +8,14 @@ use Image;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class UserController extends BaseController 
 {
     
     public function getUserPhotos() {
-        $photos = Photos::where('user_id', Auth::id())->get();
+        $photos = Photos::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
 
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);
