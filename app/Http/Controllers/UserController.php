@@ -59,6 +59,40 @@ class UserController extends BaseController
         }
     }
 
+    public function update(Request $request) {
+        $user = User::find(Auth::id());
+        $data = $request->all();
+
+        if(!$user) {
+            return $this->sendError('Usuário não encontrado!', 404);
+        }
+
+        $validate = Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required',
+            'gender' => 'required',
+            'age' => 'required'
+        ]);
+
+        if($validate->fails()){
+            return $this->sendError($validate->errors());
+        }
+
+        $user['name'] = $data['name'];
+        $user['email'] = $data['email'];
+        $user['gender'] = $data['gender'];
+        $user['age'] = $data['age'];
+
+        try {   
+            $user->save();
+            return $this->sendResponse($user, 'Usuário atualizado!');
+        } catch (Exception $e) {
+            return $this->sendError('Erro ao atualizar usuário!');
+        }
+
+
+    }
+
     private function imageStorage($image) {
 
         //gives a random name to it
