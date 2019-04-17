@@ -26,14 +26,14 @@ class AuthController extends BaseController
         $request['password'] = bcrypt($request['password']);
         
         try {
-            $data['user'] = User::create($request->all());
-            $data['token'] = $data['user']->createToken('signup')->accessToken;
+            $user = User::create($request->all());
+            $user['token'] = $user->createToken('signup')->accessToken;
         } catch (Exception $e) {
             // return $e->get();
             return $this->sendError("Erro ao cadastrar", 500);
         }
 
-        return $this->sendResponse($data, 'Usuário cadastrado!');
+        return $this->sendResponse($user, 'Usuário cadastrado!');
 
     }
 
@@ -51,13 +51,13 @@ class AuthController extends BaseController
         }
 
         if(Auth::attempt($credentials)) { 
-            $data['user'] = $request->user();
-            $data['token'] = $data['user']->createToken('signin')->accessToken;
+            $user = $request->user();
+            $user['token'] = $user->createToken('signin')->accessToken;
             
         } else {
             return $this->sendError('Credenciais inválidas!', 401);    
         }
-        return $this->sendResponse($data, 'Usuário logado!');
+        return $this->sendResponse($user, 'Usuário logado!');
 
     }
 }
