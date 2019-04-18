@@ -41,6 +41,6 @@ Route::prefix('photos')->middleware('auth:api')->group(function() {
 
 Route::prefix('user')->middleware('auth:api')->group(function() {
     Route::get('/photos', 'UserController@getUserPhotos');
-    Route::post('/profile_picture', 'UserController@setProfilePicture');
+    Route::put('/profile_picture', 'UserController@setProfilePicture');
     Route::put('/edit', 'UserController@update');
 });
