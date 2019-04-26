@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Photos;
 use App\User;
+use App\Likes;
+use App\Comments;
 use Validator;
 use Image;
 use Exception;
@@ -30,7 +32,7 @@ class UserController extends BaseController
             $photo['comments'] = $comments;
 
         }
-        
+
         return $this->sendResponse($photos, '');
     }
 
