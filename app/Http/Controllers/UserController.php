@@ -17,10 +17,20 @@ class UserController extends BaseController
     public function getUserPhotos() {
         $photos = Photos::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
 
+        
         if(!$photos) {
             return $this->sendError('Fotos não encontrada!', 404);
         }
+        
+        foreach($photos as $photo) {
+            $likes = Likes::where('photo_id', $photo['id'])->get();
+            $comments = Comments::where('photo_id', $photo['id'])->get();
 
+            $photo['likes'] = $likes;
+            $photo['comments'] = $comments;
+
+        }
+        
         return $this->sendResponse($photos, '');
     }
 
