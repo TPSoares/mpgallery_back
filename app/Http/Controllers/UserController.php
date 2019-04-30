@@ -26,7 +26,15 @@ class UserController extends BaseController
         
         foreach($photos as $photo) {
             $likes = Likes::where('photo_id', $photo['id'])->get();
+            foreach($likes as $like) {
+                $user = User::where('id', $like['user_id'])->get();
+                $like['user'] = $user;
+            }
             $comments = Comments::where('photo_id', $photo['id'])->get();
+            foreach($comments as $comment) {
+                $user = User::where('id', $comment['user_id'])->get();
+                $comment['user'] = $user;
+            }
 
             $photo['likes'] = $likes;
             $photo['comments'] = $comments;
